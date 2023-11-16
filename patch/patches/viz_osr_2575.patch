@@ -492,6 +492,7 @@ index 15c1166be9978ca040f35617f40dbbf81d50c164..6f05585e228cacffd6d34a5f86c1719b
 +      d3d11_device->GetImmediateContext(&d3d11_ctx);
 +      if (d3d11_ctx.Get()) {
 +        d3d11_ctx->CopyResource(staging_.Get(), texture_.Get());
++        d3d11_ctx->Flush();
 +      }
 +    }
 +  }
