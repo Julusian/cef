@@ -431,3 +431,13 @@ index 15c1166be9978ca040f35617f40dbbf81d50c164..d7c6ded6534f9038144d8636c81031fc
  
    handle_ = std::move(handle);
    return true;
+diff --git ui/gl/gl_image_dxgi.h ui/gl/gl_image_dxgi.h
+index 1facae06e891c5766b56168da3a9d2cbe0c932f1..91596e4e3c412358ac0d0a22746407528c64da42 100644
+--- ui/gl/gl_image_dxgi.h
++++ ui/gl/gl_image_dxgi.h
+@@ -59,12 +58,12 @@ class GL_EXPORT GLImageDXGI : public GLImage {
+   EGLSurface surface_ = nullptr;
+   EGLStreamKHR stream_ = nullptr;
+   Microsoft::WRL::ComPtr<ID3D11Texture2D> texture_;
++  Microsoft::WRL::ComPtr<ID3D11Texture2D> staging_;
+ };
