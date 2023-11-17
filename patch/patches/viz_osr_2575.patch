@@ -437,11 +437,21 @@ index 67ede44cc15f42ca7e337f60b1adfbede7d15f81..741c3dd30425f08b00344aef8c645828
                       D3D11_RESOURCE_MISC_SHARED_NTHANDLE;
    }
  
-diff --git ui/gl/gl_image_dxgi.cc ui/gl/gl_image_dxgi.cc
-index 15c1166be9978ca040f35617f40dbbf81d50c164..6f05585e228cacffd6d34a5f86c1719b64e683d7 100644
---- ui/gl/gl_image_dxgi.cc
-+++ ui/gl/gl_image_dxgi.cc
-@@ -23,10 +23,6 @@
+diff --git a/ui/gl/gl_image_dxgi.cc b/ui/gl/gl_image_dxgi.cc
+index 15c1166be9978..931b9cecc3ae8 100644
+--- a/ui/gl/gl_image_dxgi.cc
++++ b/ui/gl/gl_image_dxgi.cc
+@@ -15,6 +15,9 @@
+ #include "ui/gl/gl_image.h"
+ #include "ui/gl/gl_surface_egl.h"
+ 
++#include <thread>
++#include <chrono>
++
+ #ifndef EGL_ANGLE_d3d_texture_client_buffer
+ #define EGL_ANGLE_d3d_texture_client_buffer 1
+ #define EGL_D3D_TEXTURE_ANGLE 0x33A3
+@@ -23,10 +26,6 @@
  namespace gl {
  
  namespace {
@@ -452,7 +462,7 @@ index 15c1166be9978ca040f35617f40dbbf81d50c164..6f05585e228cacffd6d34a5f86c1719b
  
  bool SupportedBindFormat(gfx::BufferFormat format) {
    switch (format) {
-@@ -152,7 +148,6 @@ bool GLImageDXGI::BindTexImage(unsigned target) {
+@@ -152,7 +151,6 @@ bool GLImageDXGI::BindTexImage(unsigned target) {
      return true;
  
    DCHECK(texture_);
@@ -460,7 +470,7 @@ index 15c1166be9978ca040f35617f40dbbf81d50c164..6f05585e228cacffd6d34a5f86c1719b
    if (!SupportedBindFormat(buffer_format_))
      return false;
  
-@@ -166,14 +161,6 @@ bool GLImageDXGI::BindTexImage(unsigned target) {
+@@ -166,14 +164,6 @@ bool GLImageDXGI::BindTexImage(unsigned target) {
        return false;
    }
  
@@ -475,7 +485,7 @@ index 15c1166be9978ca040f35617f40dbbf81d50c164..6f05585e228cacffd6d34a5f86c1719b
    return eglBindTexImage(
               gl::GLSurfaceEGL::GetGLDisplayEGL()->GetHardwareDisplay(),
               surface_, EGL_BACK_BUFFER) == EGL_TRUE;
-@@ -220,10 +207,18 @@ void GLImageDXGI::ReleaseTexImage(unsigned target) {
+@@ -220,10 +210,46 @@ void GLImageDXGI::ReleaseTexImage(unsigned target) {
      return;
  
    DCHECK(texture_);
@@ -491,15 +501,42 @@ index 15c1166be9978ca040f35617f40dbbf81d50c164..6f05585e228cacffd6d34a5f86c1719b
 +      Microsoft::WRL::ComPtr<ID3D11DeviceContext> d3d11_ctx;
 +      d3d11_device->GetImmediateContext(&d3d11_ctx);
 +      if (d3d11_ctx.Get()) {
-+        d3d11_ctx->CopyResource(staging_.Get(), texture_.Get());
-+        d3d11_ctx->Flush();
++        Microsoft::WRL::ComPtr<ID3D11Query> query;
++
++        D3D11_QUERY_DESC desc = {};
++        desc.Query = D3D11_QUERY_EVENT;
++        HRESULT hr = d3d11_device->CreateQuery(&desc, &query);
++        if (SUCCEEDED(hr)) {
++          d3d11_ctx->CopyResource(staging_.Get(), texture_.Get());
++          d3d11_ctx->End(query.Get());
++          d3d11_ctx->Flush();
++          
++          // Poll until it is ready
++          int i = 0;
++          while(true) {
++            if (++i > 5) {
++              DLOG(ERROR) << "Poll for flush failed after a few iterations";
++              break;
++            }
++
++
++            hr = d3d11_ctx->GetData(query.Get(), nullptr, 0,
++                                          D3D11_ASYNC_GETDATA_DONOTFLUSH);
++            if (hr == S_OK) {
++              break;
++            }
++            std::this_thread::sleep_for(std::chrono::milliseconds(5));
++          }
++        } else {
++          DLOG(ERROR) << "CreateQuery failed with error 0x" << std::hex << hr;
++        }
 +      }
 +    }
 +  }
    eglReleaseTexImage(gl::GLSurfaceEGL::GetGLDisplayEGL()->GetHardwareDisplay(),
                       surface_, EGL_BACK_BUFFER);
  }
-@@ -243,15 +238,20 @@ bool GLImageDXGI::InitializeHandle(base::win::ScopedHandle handle,
+@@ -243,15 +269,20 @@ bool GLImageDXGI::InitializeHandle(base::win::ScopedHandle handle,
      return false;
  
    if (FAILED(d3d11_device1->OpenSharedResource1(handle.Get(),
