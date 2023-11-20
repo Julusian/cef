@@ -76,7 +76,7 @@ class GLImageDXGISharedHandle : public gl::GLImageDXGI {
     // shared.  We could make the render target directly shareable, but the
     // staged copy is safer for synchronization and less problematic
     td.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-    td.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
+    td.MiscFlags = D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX;
     hr = d3d11_device1->CreateTexture2D(&td, nullptr,
                                         staging_texture_.GetAddressOf());
     if (FAILED(hr)) {
