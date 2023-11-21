@@ -180,6 +180,7 @@ class CefRenderHandler : public virtual CefBaseRefCounted {
   virtual void OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,
                                   PaintElementType type,
                                   const RectList& dirtyRects,
+                                  uint8_t texture_id,
                                   void* shared_handle) {}
 
   ///

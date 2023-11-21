@@ -1022,9 +1022,10 @@ void OsrWindowWin::OnAcceleratedPaint(
     CefRefPtr<CefBrowser> browser,
     CefRenderHandler::PaintElementType type,
     const CefRenderHandler::RectList& dirtyRects,
+    uint8_t texture_id, 
     void* share_handle) {
   EnsureRenderHandler();
-  render_handler_->OnAcceleratedPaint(browser, type, dirtyRects, share_handle);
+  render_handler_->OnAcceleratedPaint(browser, type, dirtyRects, texture_id, share_handle);
 }
 
 void OsrWindowWin::OnCursorChange(CefRefPtr<CefBrowser> browser,

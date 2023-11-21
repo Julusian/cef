@@ -48,6 +48,7 @@ class OsrRenderHandlerWin {
   virtual void OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,
                                   CefRenderHandler::PaintElementType type,
                                   const CefRenderHandler::RectList& dirtyRects,
+                                  uint8_t texture_id, 
                                   void* share_handle) = 0;
 
   bool send_begin_frame() const {

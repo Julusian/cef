@@ -54,16 +54,17 @@ CefExternalRendererUpdaterOSR::~CefExternalRendererUpdaterOSR() = default;
 
 void CefExternalRendererUpdaterOSR::OnAfterFlip(
     gfx::GpuMemoryBufferHandle handle,
+    uint8_t texture_id,
     const gfx::Rect& damage_rect,
     OnAfterFlipCallback callback) {
 #if defined (OS_WIN) && !defined(ARCH_CPU_ARM_FAMILY)
   HANDLE nthandle = handle.dxgi_handle.Get();
-  view_->OnAcceleratedPaint(damage_rect, nthandle);
+  view_->OnAcceleratedPaint(damage_rect, texture_id, nthandle);
 #elif defined(OS_MAC)
-  view_->OnAcceleratedPaint(damage_rect,
+  view_->OnAcceleratedPaint(damage_rect, texture_id, 
                             (void*)(uintptr_t)(handle.io_surface.get()));
 #else
-  view_->OnAcceleratedPaint(damage_rect, nullptr);
+  view_->OnAcceleratedPaint(damage_rect, texture_id, nullptr);
 #endif
   std::move(callback).Run();
 }

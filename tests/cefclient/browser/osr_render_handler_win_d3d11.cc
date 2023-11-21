@@ -177,6 +177,7 @@ void OsrRenderHandlerWinD3D11::OnAcceleratedPaint(
     CefRefPtr<CefBrowser> browser,
     CefRenderHandler::PaintElementType type,
     const CefRenderHandler::RectList& dirtyRects,
+    uint8_t texture_id, 
     void* share_handle) {
   CEF_REQUIRE_UI_THREAD();
 

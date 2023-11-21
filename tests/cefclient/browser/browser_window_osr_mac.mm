@@ -1323,6 +1323,7 @@ class BrowserWindowOsrMacImpl {
   void OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,
                           CefRenderHandler::PaintElementType type,
                           const CefRenderHandler::RectList& dirtyRects,
+                          uint8_t texture_id, 
                           void* share_handle);
   void OnCursorChange(CefRefPtr<CefBrowser> browser,
                       CefCursorHandle cursor,
@@ -1663,6 +1664,7 @@ void BrowserWindowOsrMacImpl::OnAcceleratedPaint(
     CefRefPtr<CefBrowser> browser,
     CefRenderHandler::PaintElementType type,
     const CefRenderHandler::RectList& dirtyRects,
+    uint8_t texture_id, 
     void* share_handle) {
   CEF_REQUIRE_UI_THREAD();
   REQUIRE_MAIN_THREAD();
@@ -1671,13 +1673,13 @@ void BrowserWindowOsrMacImpl::OnAcceleratedPaint(
     return;
 
   if (painting_popup_) {
-    renderer_.OnAcceleratedPaint(browser, type, dirtyRects, share_handle);
+    renderer_.OnAcceleratedPaint(browser, type, dirtyRects, texture_id, share_handle);
     return;
   }
 
   ScopedGLContext scoped_gl_context(native_browser_view_, true);
 
-  renderer_.OnAcceleratedPaint(browser, type, dirtyRects, share_handle);
+  renderer_.OnAcceleratedPaint(browser, type, dirtyRects, texture_id, share_handle);
   if (type == PET_VIEW && !renderer_.popup_rect().IsEmpty()) {
     painting_popup_ = true;
     browser->GetHost()->Invalidate(PET_POPUP);
@@ -1914,8 +1916,9 @@ void BrowserWindowOsrMac::OnAcceleratedPaint(
     CefRefPtr<CefBrowser> browser,
     CefRenderHandler::PaintElementType type,
     const CefRenderHandler::RectList& dirtyRects,
+    uint8_t texture_id, 
     void* share_handle) {
-  impl_->OnAcceleratedPaint(browser, type, dirtyRects, share_handle);
+  impl_->OnAcceleratedPaint(browser, type, dirtyRects, texture_id, share_handle);
 }
 
 void BrowserWindowOsrMac::OnCursorChange(

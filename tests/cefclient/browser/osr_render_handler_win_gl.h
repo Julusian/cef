@@ -35,6 +35,7 @@ class OsrRenderHandlerWinGL : public OsrRenderHandlerWin {
   void OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,
                           CefRenderHandler::PaintElementType type,
                           const CefRenderHandler::RectList& dirtyRects,
+                          uint8_t texture_id, 
                           void* share_handle) override;
 
  private:
