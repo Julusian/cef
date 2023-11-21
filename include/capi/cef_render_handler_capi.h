@@ -181,18 +181,6 @@ typedef struct _cef_render_handler_t {
                                            void* shared_handle);
 
   ///
-  // New implementation by Jim. Doesn't used keyed_mutexes. There's a bool which
-  // signals a new texture.
-  ///
-  void(CEF_CALLBACK* on_accelerated_paint2)(struct _cef_render_handler_t* self,
-                                            struct _cef_browser_t* browser,
-                                            cef_paint_element_type_t type,
-                                            size_t dirtyRectsCount,
-                                            cef_rect_t const* dirtyRects,
-                                            void* shared_handle,
-                                            int new_texture);
-
-  ///
   // Called when the user starts dragging content in the web view. Contextual
   // information about the dragged content is supplied by |drag_data|. (|x|,
   // |y|) is the drag start location in screen coordinates. OS APIs that run a
