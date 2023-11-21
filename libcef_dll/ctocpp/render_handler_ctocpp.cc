@@ -1,4 +1,4 @@
-// Copyright (c) 2022 The Chromium Embedded Framework Authors. All rights
+// Copyright (c) 2023 The Chromium Embedded Framework Authors. All rights
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 //
@@ -9,7 +9,7 @@
 // implementations. See the translator.README.txt file in the tools directory
 // for more information.
 //
-// $hash=8d30c4f8cf47bac2f9f728de876abb759b38041f$
+// $hash=ad2b1e5fb42188cd54669ec74ad25714e1333d69$
 //
 
 #include "libcef_dll/ctocpp/render_handler_ctocpp.h"
@@ -21,8 +21,8 @@
 // VIRTUAL METHODS - Body may be edited by hand.
 
 NO_SANITIZE("cfi-icall")
-CefRefPtr<CefAccessibilityHandler>
-CefRenderHandlerCToCpp::GetAccessibilityHandler() {
+CefRefPtr<
+    CefAccessibilityHandler> CefRenderHandlerCToCpp::GetAccessibilityHandler() {
   shutdown_checker::AssertNotShutdown();
 
   cef_render_handler_t* _struct = GetStruct();
@@ -225,6 +225,7 @@ NO_SANITIZE("cfi-icall")
 void CefRenderHandlerCToCpp::OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,
                                                 PaintElementType type,
                                                 const RectList& dirtyRects,
+                                                uint8_t texture_id,
                                                 void* shared_handle) {
   shutdown_checker::AssertNotShutdown();
 
@@ -258,7 +259,8 @@ void CefRenderHandlerCToCpp::OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,
 
   // Execute
   _struct->on_accelerated_paint(_struct, CefBrowserCppToC::Wrap(browser), type,
-                                dirtyRectsCount, dirtyRectsList, shared_handle);
+                                dirtyRectsCount, dirtyRectsList, texture_id,
+                                shared_handle);
 
   // Restore param:dirtyRects; type: simple_vec_byref_const
   if (dirtyRectsList)

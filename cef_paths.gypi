@@ -1,4 +1,4 @@
-# Copyright (c) 2022 The Chromium Embedded Framework Authors. All rights
+# Copyright (c) 2023 The Chromium Embedded Framework Authors. All rights
 # reserved. Use of this source code is governed by a BSD-style license that
 # can be found in the LICENSE file.
 #
@@ -8,7 +8,7 @@
 # by hand. See the translator.README.txt file in the tools directory for
 # more information.
 #
-# $hash=5f2e9bf79ec768c0eb978ff5e1dd0178701dcc21$
+# $hash=0d5346c83bf01781859c971f7165aa309883d403$
 #
 
 {

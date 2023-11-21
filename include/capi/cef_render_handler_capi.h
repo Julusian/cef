@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2023 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,7 +33,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=ff7e4de5301fb3f098c4267d04344ee69a9eb809$
+// $hash=f24b3765a4f34dcf17768d88817bd7d368b6e936$
 //
 
 #ifndef CEF_INCLUDE_CAPI_CEF_RENDER_HANDLER_CAPI_H_
@@ -178,6 +178,7 @@ typedef struct _cef_render_handler_t {
                                            cef_paint_element_type_t type,
                                            size_t dirtyRectsCount,
                                            cef_rect_t const* dirtyRects,
+                                           uint8_t texture_id,
                                            void* shared_handle);
 
   ///

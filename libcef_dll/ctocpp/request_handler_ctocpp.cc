@@ -1,4 +1,4 @@
-// Copyright (c) 2022 The Chromium Embedded Framework Authors. All rights
+// Copyright (c) 2023 The Chromium Embedded Framework Authors. All rights
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 //
@@ -9,7 +9,7 @@
 // implementations. See the translator.README.txt file in the tools directory
 // for more information.
 //
-// $hash=8a0ae45a7340b21491e67f4b4bd5494fb6c14d8c$
+// $hash=c704c95e98cbecc6e635c6c7ac3b8999da4be9ad$
 //
 
 #include "libcef_dll/ctocpp/request_handler_ctocpp.h"
@@ -100,15 +100,14 @@ bool CefRequestHandlerCToCpp::OnOpenURLFromTab(
 }
 
 NO_SANITIZE("cfi-icall")
-CefRefPtr<CefResourceRequestHandler>
-CefRequestHandlerCToCpp::GetResourceRequestHandler(
-    CefRefPtr<CefBrowser> browser,
-    CefRefPtr<CefFrame> frame,
-    CefRefPtr<CefRequest> request,
-    bool is_navigation,
-    bool is_download,
-    const CefString& request_initiator,
-    bool& disable_default_handling) {
+CefRefPtr<CefResourceRequestHandler> CefRequestHandlerCToCpp::
+    GetResourceRequestHandler(CefRefPtr<CefBrowser> browser,
+                              CefRefPtr<CefFrame> frame,
+                              CefRefPtr<CefRequest> request,
+                              bool is_navigation,
+                              bool is_download,
+                              const CefString& request_initiator,
+                              bool& disable_default_handling) {
   shutdown_checker::AssertNotShutdown();
 
   cef_request_handler_t* _struct = GetStruct();

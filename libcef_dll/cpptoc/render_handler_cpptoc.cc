@@ -1,4 +1,4 @@
-// Copyright (c) 2022 The Chromium Embedded Framework Authors. All rights
+// Copyright (c) 2023 The Chromium Embedded Framework Authors. All rights
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 //
@@ -9,7 +9,7 @@
 // implementations. See the translator.README.txt file in the tools directory
 // for more information.
 //
-// $hash=17fc7e8f42e6c518405f2aba5e849c98bf8122ce$
+// $hash=d546634c9cf723ed5e3832d044fd9a103d2c4c9e$
 //
 
 #include "libcef_dll/cpptoc/render_handler_cpptoc.h"
@@ -294,6 +294,7 @@ render_handler_on_accelerated_paint(struct _cef_render_handler_t* self,
                                     cef_paint_element_type_t type,
                                     size_t dirtyRectsCount,
                                     cef_rect_t const* dirtyRects,
+                                    uint8_t texture_id,
                                     void* shared_handle) {
   shutdown_checker::AssertNotShutdown();
 
@@ -326,7 +327,8 @@ render_handler_on_accelerated_paint(struct _cef_render_handler_t* self,
 
   // Execute
   CefRenderHandlerCppToC::Get(self)->OnAcceleratedPaint(
-      CefBrowserCToCpp::Wrap(browser), type, dirtyRectsList, shared_handle);
+      CefBrowserCToCpp::Wrap(browser), type, dirtyRectsList, texture_id,
+      shared_handle);
 }
 
 int CEF_CALLBACK
