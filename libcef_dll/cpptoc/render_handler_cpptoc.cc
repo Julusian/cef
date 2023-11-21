@@ -9,7 +9,7 @@
 // implementations. See the translator.README.txt file in the tools directory
 // for more information.
 //
-// $hash=9439221629149d15c4a608bb10809b60df6dba34$
+// $hash=17fc7e8f42e6c518405f2aba5e849c98bf8122ce$
 //
 
 #include "libcef_dll/cpptoc/render_handler_cpptoc.h"

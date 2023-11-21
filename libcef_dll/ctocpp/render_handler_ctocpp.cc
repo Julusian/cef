@@ -9,7 +9,7 @@
 // implementations. See the translator.README.txt file in the tools directory
 // for more information.
 //
-// $hash=c634296831706d5127461d3186b082089ea8a493$
+// $hash=8d30c4f8cf47bac2f9f728de876abb759b38041f$
 //
 
 #include "libcef_dll/ctocpp/render_handler_ctocpp.h"
@@ -21,8 +21,8 @@
 // VIRTUAL METHODS - Body may be edited by hand.
 
 NO_SANITIZE("cfi-icall")
-CefRefPtr<
-    CefAccessibilityHandler> CefRenderHandlerCToCpp::GetAccessibilityHandler() {
+CefRefPtr<CefAccessibilityHandler>
+CefRenderHandlerCToCpp::GetAccessibilityHandler() {
   shutdown_checker::AssertNotShutdown();
 
   cef_render_handler_t* _struct = GetStruct();
