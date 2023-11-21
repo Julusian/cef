@@ -34,6 +34,7 @@ class CefExternalRendererUpdaterOSR
 
   // viz::mojom::ExternalRendererUpdater implementation.
   void OnAfterFlip(gfx::GpuMemoryBufferHandle handle,
+                  uint8_t texture_id,
                    const gfx::Rect& damage_rect,
                    OnAfterFlipCallback callback) override;
 

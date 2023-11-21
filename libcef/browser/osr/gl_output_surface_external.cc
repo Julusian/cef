@@ -29,8 +29,10 @@ namespace viz {
 class ExternalImageData {
  public:
   ExternalImageData(gpu::gles2::GLES2Interface* gl,
-                    const gpu::Capabilities& capabilities)
-      : gl_(gl) {
+                    const gpu::Capabilities& capabilities,
+                    uint8_t id)
+      : gl_(gl)
+      , id_(id) {
     texture_target_ = gpu::GetBufferTextureTarget(
         gfx::BufferUsage::SCANOUT, gfx::BufferFormat::RGBA_8888, capabilities);
   }
@@ -73,6 +75,10 @@ class ExternalImageData {
     }
 
     gl_->GenTextures(1, &texture_id_);
+  }
+
+  uint8_t MyId() {
+    return id_;
   }
 
   gfx::GpuMemoryBufferHandle GetHandle() {
@@ -123,6 +129,7 @@ class ExternalImageData {
 
   gpu::gles2::GLES2Interface* gl_;
 
+  uint8_t id_;
   gfx::Size size_;
   gfx::ColorSpace color_space_;
   uint32_t texture_target_ = 0;
@@ -165,7 +172,7 @@ void GLOutputSurfaceExternal::EnsureBackbuffer() {
                          std::min(size_.height(), max_texture_size));
 
   current_surface_ = std::make_unique<ExternalImageData>(
-      gl, context_provider_->ContextCapabilities());
+      gl, context_provider_->ContextCapabilities(), next_id_++);
   current_surface_->Create(texture_size, color_space_,
                            gpu_memory_buffer_manager_);
 
@@ -233,13 +240,14 @@ void GLOutputSurfaceExternal::SwapBuffers(OutputSurfaceFrame frame) {
 
 void GLOutputSurfaceExternal::OnSyncWaitComplete(
     std::vector<ui::LatencyInfo> latency_info) {
+      uint8_t texture_id = current_surface_->MyId();
   gfx::GpuMemoryBufferHandle handle = current_surface_->GetHandle();
 
   in_flight_surfaces_.push_back(std::move(current_surface_));
 
   if (handle.type != gfx::GpuMemoryBufferType::EMPTY_BUFFER) {
     external_renderer_updater_->OnAfterFlip(
-        std::move(handle), gfx::Rect(size_),
+        std::move(handle), texture_id, gfx::Rect(size_),
         base::BindOnce(&GLOutputSurfaceExternal::OnAfterSwap,
                        weak_ptr_factory_.GetWeakPtr(),
                        std::move(latency_info)));

@@ -50,6 +50,7 @@ class VIZ_SERVICE_EXPORT GLOutputSurfaceExternal : public GLOutputSurface {
   std::vector<std::unique_ptr<ExternalImageData>> available_surfaces_;
   base::circular_deque<std::unique_ptr<ExternalImageData>> in_flight_surfaces_;
 
+  uint8_t next_id_ = 1;
   uint32_t fbo_ = 0;
   gfx::Size size_;
   gfx::ColorSpace color_space_;
